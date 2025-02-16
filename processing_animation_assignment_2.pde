@@ -2,6 +2,17 @@
 // damon chan
 // https://www.dafont.com/eight-bit-madness.font
 
+import ddf.minim.*;
+import ddf.minim.analysis.*;
+import ddf.minim.effects.*;
+import ddf.minim.signals.*;
+import ddf.minim.spi.*;
+import ddf.minim.ugens.*;
+
+Minim minimtools;
+AudioPlayer slash;
+AudioPlayer dmg;
+AudioPlayer song;
 
 PFont retro;
 int x;
@@ -19,6 +30,11 @@ int textspeed;
 
 void setup() {
   size (800,800);
+  minimtools = new Minim(this);
+  slash = minimtools.loadFile("undertale-slash.mp3");
+  dmg = minimtools.loadFile("dealing-damage.mp3");
+  song = minimtools.loadFile("music.mp3");
+  song.play();
   retro = createFont("Eight-Bit Madness.ttf", 45);
   x = -500;
   counter = 1;
@@ -179,6 +195,9 @@ void draw() {
   //slash
   stroke(#F27188);
   fill(#F27188);
+  if (x == 300) {
+    slash.play();
+  }
   if (attackframe == 1 || attackframe == 2 || attackframe == 3) {
     rect(400,140, 2,8);
   }
@@ -256,7 +275,9 @@ void draw() {
 
 
 //enemy health bar  stroke(#626161);
-
+  if (attackframe == 15) {
+    dmg.play();
+  }
   if (attackframe > 60 && attackframe <= 200) { //both bars will stay until frame 200
     stroke(#626161);
     fill(#626161);
