@@ -2,22 +2,67 @@
 // damon chan
 // https://www.dafont.com/eight-bit-madness.font
 
+import ddf.minim.*;
+import ddf.minim.analysis.*;
+import ddf.minim.effects.*;
+import ddf.minim.signals.*;
+import ddf.minim.spi.*;
+import ddf.minim.ugens.*;
+
+Minim minimtools;
+AudioPlayer slash;
+AudioPlayer dmg;
+AudioPlayer song;
 
 PFont retro;
-
 int x;
+int counter;
+int black;
+int white;
+int flashes;
+int y;
+int attackframe;
+int health;
+int reset;
+int textheight;
+int textspeed;
+PImage img;
+int fx;
+int ow;
 
 
 
 void setup() {
   size (800,800);
+  img = loadImage("froggit_img.png");
+  minimtools = new Minim(this);
+  slash = minimtools.loadFile("undertale-slash.mp3");
+  dmg = minimtools.loadFile("dealing-damage.mp3");
+  song = minimtools.loadFile("music.mp3");
+  song.play();
   retro = createFont("Eight-Bit Madness.ttf", 45);
+  x = -500;
+  counter = 1;
+  black = 0;
+  white = 255;
+  flashes = 0;
+  y = 465;
+  attackframe = 0;
+  health = 180;
+  reset = 0;
+  textheight = 90;
+  textspeed = 5;
+  fx = 300;
+  ow = 0;
+
+  
+  
+  
   
 }
 
 
 void draw() {
-  
   background(#000000);
   stroke(#FF8808);
   strokeWeight(2);
@@ -120,7 +165,193 @@ void draw() {
   line(280,515, 330,515);
   line(280,555, 330,555);
   line(470,555, 520,555);
-  //line(470,555, 520,555);
+  line(470,515, 520,515);
+  
+  //froggit
+  image(img, fx,150, 200,200);
+  if (attackframe == 60) {
+    ow += 1;
+  }
+  if (ow == 1) {
+    fx += 3;
+  }
+  if (fx >= 320) {
+    ow -= 2;
+  }
+  if (ow == -1) {
+    fx -= 3;
+  }
+  if (fx <= 280) {
+    ow += 2;
+  }
+  if (attackframe == 155) {
+    ow = 0;
+    fx = 300;
+  }
+ 
+  
+  //timing bar
+  fill(white);
+  stroke(black);
+  strokeWeight(5);
+  
+
+  rect(x,y, 15,150);
+  x += 10;
+  
+  if (x > 395) {
+    x = 395;
+    counter += 1;
+    attackframe += 1;
+  }
+  
+  if (counter <= 7) {
+    white = 0;
+    black = 255;
+  }
+  
+  if (counter > 7) {
+    white = 255;
+    black = 0;
+  }
+  
+  if (counter == 14) {
+    counter = 1;
+    flashes += 1;
+  }
+  
+  if (flashes == 15) {
+    y = 805;
+  }
+    
+  //slash
+  stroke(#F27188);
+  fill(#F27188);
+  if (x == 300) {
+    slash.play();
+    slash.rewind();
+  }
+  if (attackframe == 1 || attackframe == 2 || attackframe == 3) {
+    rect(400,140, 2,8);
+  }
+  if (attackframe == 4 || attackframe == 5 || attackframe == 6) {
+    rect(396,148, 1,20);
+  }
+  if (attackframe == 7 || attackframe == 8 || attackframe == 9) {
+    rect(394,151, 1,30);
+  }
+  if (attackframe == 10 || attackframe == 11 || attackframe == 12) {
+    rect(392,160, 1,50);
+  }
+  if (attackframe == 13 || attackframe == 14 || attackframe == 15) {
+    rect(390,179, 1,75);
+    rect(388,184, 2,20);
+  }
+  if (attackframe == 16 || attackframe == 17 || attackframe == 18) {
+    rect(389,190, 1,90);
+    rect(385,220, 3,30);
+  }
+  if (attackframe == 19 || attackframe == 20 || attackframe == 21) {
+    rect(389,210, 1,80);
+    rect(385,240, 3,40);
+  }
+  if (attackframe == 22 || attackframe == 23 || attackframe == 24) {
+    rect(389,230, 1,70);
+    rect(387,250, 3,40);
+  }
+  if (attackframe == 25 || attackframe == 26 || attackframe == 27) {
+    rect(390,250, 2,60);
+    rect(389,270, 2,40);
+  }
+  if (attackframe == 28 || attackframe == 29 || attackframe == 30) {
+    rect(391,290, 2,45);
+    rect(391,295, 2,45);
+  }
+  if (attackframe == 29 || attackframe == 30 || attackframe == 31) {
+    rect(395,310, 3,20);
+    rect(395,315, 3,7);
+  }
+  if (attackframe == 32 || attackframe == 33 || attackframe == 34) {
+    rect(393,334, 10,5);
+    rect(395,336, 7,4);
+  }
+  if (attackframe == 35 || attackframe == 36 || attackframe == 37) {
+    rect(397,337, 11,2);
+    rect(400,340, 4,2);
+  }
+  if (attackframe == 38 || attackframe == 39 || attackframe == 40) {
+    rect(410,337, 8,3);
+  }
+  if (attackframe == 41 || attackframe == 42 || attackframe == 43) {
+    rect(415,335, 5,4);
+    rect(417,333, 3,4);
+  }
+  if (attackframe == 44 || attackframe == 45 || attackframe == 46) {
+    rect(415,330, 2,6);
+    rect(417,328, 2,3);
+  }
+
+//damage
+  if (attackframe > 60 && attackframe <= 200) {
+    fill(#D33131);
+    textSize(60);
+    text("21", 375,textheight);
+    textheight -= textspeed;
+  }
+  if (attackframe > 60 && attackframe <= 72) {
+    textspeed -= 1;
+  }
+  if (textspeed == -7) {
+    textheight = 90;
+  }
+
+
+
+//enemy health bar  stroke(#626161);
+  if (attackframe == 15) {
+    dmg.play();
+    dmg.rewind();
+  }
+  if (attackframe > 60 && attackframe <= 200) { //both bars will stay until frame 200
+    stroke(#626161);
+    fill(#626161);
+    rect(310,100, 180,15);
+    stroke(#05E802);
+    fill(#05E802);
+    rect(310,100, health,15);
+    reset += 1;
+  }
+  
+  if (attackframe > 60 && attackframe <= 150) { //will lose 90 health and stop by frame 150
+    health -= 1;
+  }
+  
+  
+//loop
+  if (reset == 140) {
+    x = -500;
+    counter = 1;
+    black = 0;
+    white = 255;
+    flashes = 0;
+    y = 465;
+    attackframe = 0;
+    health = 180;
+    textheight = 90;
+    textspeed = 5;
+    reset = 0;
+    
+  }
+    
+
+    
+    
+    
+
+
+    
+    
+  
   
   
   
