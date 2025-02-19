@@ -29,8 +29,14 @@ int textspeed;
 PImage img;
 int fx;
 int ow;
-
-
+int bbox;
+int stop;
+int opa;
+int r1;
+int r2;
+int r3;
+int tru;
+int r4;
 
 void setup() {
   size (800,800);
@@ -54,9 +60,14 @@ void setup() {
   textspeed = 5;
   fx = 300;
   ow = 0;
-
-  
-  
+  bbox = 10;
+  stop = 0;
+  opa = 255;
+  r1 = 0;
+  r2 = 0;
+  r3 = -700;
+  tru = 0;
+  r4 = -700;
   
   
 }
@@ -112,6 +123,7 @@ void draw() {
   fill(#FFF700);
   rect(360,638,32,25);
 
+
 //attack bar bars
   stroke(#F50A0A); //red
   fill(#F50A0A);
@@ -166,6 +178,7 @@ void draw() {
   line(280,555, 330,555);
   line(470,555, 520,555);
   line(470,515, 520,515);
+  
   
   //froggit
   image(img, fx,150, 200,200);
@@ -306,8 +319,8 @@ void draw() {
   }
 
 
-
-//enemy health bar  stroke(#626161);
+  strokeWeight(0);
+//enemy health bar
   if (attackframe == 15) {
     dmg.play();
     dmg.rewind();
@@ -322,13 +335,72 @@ void draw() {
     reset += 1;
   }
   
-  if (attackframe > 60 && attackframe <= 150) { //will lose 90 health and stop by frame 150
-    health -= 1;
+  if (attackframe > 60 && attackframe <= 155) { //will lose 95 health and stop by frame 150
+    if (health == 0) {
+     
+    }
+    else {
+      health -= 1;
+    }
   }
+  
+  if (health == 0 && attackframe >= 200) {
+    stop += 1;
+    tint(255, opa);
+    opa -= 5;
+    stroke(0);
+    fill(0); 
+    rect(765,460, r2,160);
+    rect(35,460, r1,160);
+    
+  if (health == 0 && attackframe >= 200 && tru == 0) {
+    r1 += 5;
+    r2 -= 5;
+    stroke(#FFFFFF); //white box again to not get overlapped
+    noFill();
+    strokeWeight(5);
+    rect(30,460,740,160);
+  }
+  if (r1 == 700) {
+    tru += 1;
+  }
+    
+  }
+  
+  if (health == 0 && attackframe >= 330) {
+    fill(255);
+    text("* YOU WON!", 70,515);
+    stroke(0);
+    fill(0);
+    rect(765,460, r3,80);
+    r3 += 5;
+    stroke(#FFFFFF); //white box again to not get overlapped
+    noFill();
+    strokeWeight(5);
+    rect(30,460,740,160);
+
+  }
+  
+  if (health == 0 && attackframe >= 400) {
+    fill(255);
+    text("* You earned 3 XP and 2 gold.", 70,565);
+    stroke(0);
+    fill(0);
+    rect(765,540, r4,80);
+    r4 += 5;
+    stroke(#FFFFFF); //white box again to not get overlapped
+    noFill();
+    strokeWeight(5);
+    rect(30,460,740,160);
+  }
+
+  
+  
+  
   
   
 //loop
-  if (reset == 140) {
+  if (reset == 140 && stop == 0) {
     x = -500;
     counter = 1;
     black = 0;
@@ -336,10 +408,11 @@ void draw() {
     flashes = 0;
     y = 465;
     attackframe = 0;
-    health = 180;
+    //health = 180;
     textheight = 90;
     textspeed = 5;
     reset = 0;
+    bbox = 10;
     
   }
     
