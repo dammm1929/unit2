@@ -13,6 +13,8 @@ Minim minimtools;
 AudioPlayer slash;
 AudioPlayer dmg;
 AudioPlayer song;
+AudioPlayer dust;
+AudioPlayer text;
 
 PFont retro;
 int x;
@@ -45,6 +47,8 @@ void setup() {
   slash = minimtools.loadFile("undertale-slash.mp3");
   dmg = minimtools.loadFile("dealing-damage.mp3");
   song = minimtools.loadFile("music.mp3");
+  dust = minimtools.loadFile("dustsound.mp3");
+  text = minimtools.loadFile("textsound.mp3");
   song.play();
   retro = createFont("Eight-Bit Madness.ttf", 45);
   x = -500;
@@ -353,6 +357,11 @@ void draw() {
     rect(765,460, r2,160);
     rect(35,460, r1,160);
     
+  if (opa == 250) {
+    dust.play();
+    dust.rewind();
+  }
+    
   if (health == 0 && attackframe >= 200 && tru == 0) {
     r1 += 5;
     r2 -= 5;
@@ -367,13 +376,14 @@ void draw() {
     
   }
   
-  if (health == 0 && attackframe >= 330) {
+  if (health == 0 && attackframe >= 320) {
     fill(255);
     text("* YOU WON!", 70,515);
     stroke(0);
     fill(0);
     rect(765,460, r3,80);
-    r3 += 5;
+    text.play();
+    r3 += 8;
     stroke(#FFFFFF); //white box again to not get overlapped
     noFill();
     strokeWeight(5);
@@ -381,13 +391,13 @@ void draw() {
 
   }
   
-  if (health == 0 && attackframe >= 400) {
+  if (health == 0 && attackframe >= 380) {
     fill(255);
     text("* You earned 3 XP and 2 gold.", 70,565);
     stroke(0);
     fill(0);
     rect(765,540, r4,80);
-    r4 += 5;
+    r4 += 8;
     stroke(#FFFFFF); //white box again to not get overlapped
     noFill();
     strokeWeight(5);
